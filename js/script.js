@@ -2,7 +2,7 @@ function calculateInstallment() {
     const productPrice = parseInt(document.getElementById('productPrice').value) || 0;
     const percentage = parseInt(document.getElementById('installment').value);
     const period = parseInt(document.getElementById('installmentPeriod').value);
-    const serviceFee = parseInt(document.getElementById('serviceFee').value) || 100; // Default to 100 if not specified
+    const serviceFee = parseInt(document.getElementById('serviceFee').value) || ; 
 
     const downPayment = (productPrice * percentage) / 100;
     const remainingAmount = productPrice - downPayment;
