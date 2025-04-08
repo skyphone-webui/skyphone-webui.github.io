@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SkyPhone</title>
+    <title>skyphone-webui.github.io</title>
     <link rel="stylesheet" href="/styles/styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Prompt:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -11,7 +11,7 @@
 <body>
     <header>
         <div class="header-content">
-            <h1><i class="fas fa-mobile-alt"></i> SkyPhone</h1>
+            <h1><i class="fas fa-mobile-alt"></i> skyphone-webui.github.io</h1>
             <div class="search-container">
                 <i class="fas fa-search search-icon"></i>
                 <input type="text" id="search" placeholder="ค้นหาสินค้าของเราได้เลยวันนี้">
@@ -33,11 +33,11 @@
                 <div class="details">
                     <h3>iPhone 14 Pro Max</h3>
                     <p class="price">฿44,900</p>
-                    <p class="screen"><i class="fas fa-mobile-screen"></i> จอ 6.5 นิ้ว</p>
-                    <p class="battery"><i class="fas fa-battery-full"></i> แบตเตอรี่ 4000mAh</p>
+                    <p class="screen"><i class="fas fa-mobile-screen"></i>ราคา จอ 6.5 นิ้ว 4,500 บาท</p>
+                    <p class="battery"><i class="fas fa-battery-full"></i>ราคา แบตเตอรี่ 4000mAh 1,500 บาท</p>
                     <p class="storage"><i class="fas fa-memory"></i> ความจุ 128GB</p>
                     <p class="processor"><i class="fas fa-microchip"></i> ชิป A16 Bionic</p>
-                    <button class="select-product" data-id="1" data-price="12000">เลือกสินค้า</button>
+                    <button class="select-product" data-id="1" data-price="44900">เลือกสินค้า</button>
                 </div>
             </div>
             
@@ -48,8 +48,8 @@
                 <div class="details">
                     <h3>Samsung Galaxy S23 Ultra</h3>
                     <p class="price">฿15,000</p>
-                    <p class="screen"><i class="fas fa-mobile-screen"></i> จอ 6.7 นิ้ว</p>
-                    <p class="battery"><i class="fas fa-battery-full"></i> แบตเตอรี่ 5000mAh</p>
+                    <p class="screen"><i class="fas fa-mobile-screen"></i>ราคา จอ 6.7 นิ้ว 2,500 บาท</p>
+                    <p class="battery"><i class="fas fa-battery-full"></i>ราคา แบตเตอรี่ 5000mAh 3,500 บาท</p>
                     <p class="storage"><i class="fas fa-memory"></i> ความจุ 256GB</p>
                     <p class="processor"><i class="fas fa-microchip"></i> ชิป Snapdragon 8 Gen 2</p>
                     <button class="select-product" data-id="2" data-price="15000">เลือกสินค้า</button>
@@ -63,8 +63,8 @@
                 <div class="details">
                     <h3>Google Pixel 7 Pro</h3>
                     <p class="price">฿18,000</p>
-                    <p class="screen"><i class="fas fa-mobile-screen"></i> จอ 7.0 นิ้ว</p>
-                    <p class="battery"><i class="fas fa-battery-full"></i> แบตเตอรี่ 6000mAh</p>
+                    <p class="screen"><i class="fas fa-mobile-screen"></i>ราคา จอ 7.0 นิ้ว 3,000 บาท</p>
+                    <p class="battery"><i class="fas fa-battery-full"></i>ราคา แบตเตอรี่ 6000mAh 1,000 บาท</p>
                     <p class="storage"><i class="fas fa-memory"></i> ความจุ 512GB</p>
                     <p class="processor"><i class="fas fa-microchip"></i> ชิป Google Tensor G2</p>
                     <button class="select-product" data-id="3" data-price="18000">เลือกสินค้า</button>
@@ -78,7 +78,7 @@
                 <div class="form-group">
                     <label for="productSelect"><i class="fas fa-mobile-alt"></i> เลือกสินค้า:</label>
                     <select id="productSelect">
-                        <option value="12000">iPhone 14 Pro Max - ฿44,900</option>
+                        <option value="44900">iPhone 14 Pro Max - ฿44,900</option>
                         <option value="15000">Samsung Galaxy S23 Ultra - ฿15,000</option>
                         <option value="18000">Google Pixel 7 Pro - ฿18,000</option>
                     </select>
@@ -103,7 +103,27 @@
                 </div>
             </div>
             <div id="installmentResult"></div>
-            <div class="installment-breakdown"></div>
+            <div class="installment-breakdown">
+                <h4>ตารางการผ่อนชำระ</h4>
+                <div class="table-container">
+                    <div class="table-scroll">
+                        <i class="fas fa-chevron-right table-scroll-indicator"></i>
+                        <table class="payment-table">
+                            <thead>
+                                <tr>
+                                    <th>งวดที่</th>
+                                    <th>เงินต้น</th>
+                                    <th>ดอกเบี้ย</th>
+                                    <th>ยอดชำระ</th>
+                                    <th>เงินต้นคงเหลือ</th>
+                                </tr>
+                            </thead>
+                            <tbody id="paymentTableBody">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </section>
     </main>
 
