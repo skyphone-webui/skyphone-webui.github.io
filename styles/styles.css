@@ -1,0 +1,699 @@
+/* ตั้งค่าพื้นฐาน */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-color: #2563eb;
+    --secondary-color: #1e40af;
+    --accent-color: #3b82f6;
+    --light-accent: #93c5fd;
+    --background-color: #f8fafc;
+    --text-color: #1e293b;
+    --card-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+body {
+    font-family: 'Inter', 'Prompt', sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    background-image: linear-gradient(to bottom, #f1f5f9, #e2e8f0);
+}
+
+/* ส่วนหัว */
+header {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    padding: 2rem 1.5rem;
+    text-align: center;
+    box-shadow: var(--card-shadow);
+    position: relative;
+    overflow: hidden;
+}
+
+header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 80%);
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.header-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    position: relative;
+    z-index: 1;
+}
+
+header h1 {
+    font-size: 2.5rem;
+    letter-spacing: 1px;
+    margin: 0;
+    text-transform: uppercase;
+    animation: headerFadeIn 1s ease-out;
+    font-weight: 700;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.search-container {
+    position: relative;
+    width: 50%;
+    min-width: 300px;
+}
+
+.search-icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(255, 255, 255, 0.7);
+    z-index: 2;
+}
+
+#search {
+    margin-top: 0;
+    padding: 0.75rem 1.5rem 0.75rem 2.5rem;
+    width: 100%;
+    border-radius: 9999px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.3s ease;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+}
+
+#search::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+#search:focus {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.4);
+    transform: scale(1.02);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+}
+
+/* เนื้อหาหลัก */
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+    max-width: 1200px;
+}
+
+.products-heading {
+    text-align: center;
+    margin-bottom: 1rem;
+    animation: fadeInUp 0.5s ease;
+}
+
+.products-heading h2 {
+    color: var(--primary-color);
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.products-heading p {
+    color: var(--text-color);
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* ส่วนของสินค้า */
+#products {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    width: 100%;
+}
+
+.product {
+    background-color: white;
+    border-radius: 1rem;
+    box-shadow: var(--card-shadow);
+    padding: 1.5rem;
+    text-align: center;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.product-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background-color: var(--primary-color);
+    color: white;
+    padding: 0.3rem 0.8rem;
+    border-radius: 9999px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 2;
+}
+
+.product-badge-new {
+    background-color: #10b981;
+}
+
+.product-badge-sale {
+    background-color: #ef4444;
+}
+
+.product::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.product:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.product:hover::before {
+    opacity: 1;
+}
+
+.product img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 0.75rem;
+    transition: transform 0.5s ease;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.product:hover img {
+    transform: scale(1.08);
+}
+
+.details {
+    margin-top: 1.5rem;
+    position: relative;
+    z-index: 1;
+}
+
+.details h3 {
+    color: var(--primary-color);
+    margin-bottom: 0.75rem;
+    font-weight: 700;
+    font-size: 1.25rem;
+}
+
+.details p {
+    margin: 0.5rem 0;
+    font-size: 1rem;
+    color: var(--text-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.details p::before {
+    display: none;
+}
+
+.details p i {
+    color: var(--accent-color);
+    width: 20px;
+    text-align: center;
+}
+
+.price {
+    font-size: 1.5rem !important;
+    font-weight: 700;
+    color: var(--primary-color) !important;
+    background: linear-gradient(to right, var(--primary-color), var(--accent-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-block !important;
+    padding: 0.25rem 0;
+    margin-bottom: 1rem !important;
+}
+
+.select-product {
+    margin-top: 1rem;
+    padding: 0.6rem 1.5rem;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    border: none;
+    border-radius: 9999px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.select-product:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.select-product:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* เครื่องคำนวณผ่อนชำระ */
+#calculator {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 1rem;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: var(--card-shadow);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+#calculator:hover {
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+#calculator::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+}
+
+#calculator h2 {
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+    text-align: center;
+    font-weight: 700;
+    position: relative;
+    padding-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+#calculator h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+    border-radius: 3px;
+}
+
+.calculator-form {
+    display: grid;
+    gap: 1.25rem;
+    margin-bottom: 1.5rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-group label {
+    font-weight: 500;
+    color: var(--text-color);
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.form-group label i {
+    color: var(--primary-color);
+}
+
+#installment, #productSelect, #installmentPeriod {
+    padding: 0.75rem 1.5rem;
+    width: 100%;
+    border-radius: 0.5rem;
+    border: 2px solid #e2e8f0;
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.3s ease;
+    background-color: #f8fafc;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%232563eb'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 1rem;
+    cursor: pointer;
+}
+
+#installment:focus, #productSelect:focus, #installmentPeriod:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    transform: translateY(-2px);
+}
+
+#installmentResult {
+    margin-top: 1.5rem;
+    padding: 1.5rem;
+    background-color: #eff6ff;
+    border-radius: 0.75rem;
+    border: 1px solid #bfdbfe;
+    animation: fadeInUp 0.5s ease;
+}
+
+#installmentResult h3 {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+#installmentResult p {
+    margin: 0.5rem 0;
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+.installment-breakdown {
+    margin-top: 1.5rem;
+    padding: 1.5rem;
+    background-color: #f1f5f9;
+    border-radius: 0.75rem;
+    border: 1px solid #e2e8f0;
+    animation: fadeInUp 0.5s ease 0.1s both;
+}
+
+.installment-breakdown h4 {
+    color: var(--text-color);
+    margin-bottom: 1rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+.installment-breakdown p {
+    margin: 0.5rem 0;
+    color: var(--text-color);
+    font-size: 0.95rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Payment Table */
+.payment-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+}
+
+.payment-table th,
+.payment-table td {
+    padding: 0.75rem 0.5rem;
+    text-align: center;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.payment-table th {
+    background-color: rgba(59, 130, 246, 0.1);
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.payment-table tr:last-child td {
+    border-bottom: none;
+    font-weight: 600;
+}
+
+.payment-table tr:hover td {
+    background-color: rgba(59, 130, 246, 0.05);
+}
+
+/* Highlight */
+.highlight {
+    background-color: rgba(59, 130, 246, 0.2);
+    color: var(--primary-color);
+    padding: 0.1rem 0.3rem;
+    border-radius: 0.25rem;
+    font-weight: 600;
+}
+
+#installmentResult .highlight {
+    color: var(--primary-color);
+    font-weight: 700;
+    font-size: 1.1rem;
+    display: inline-block;
+    background: linear-gradient(to right, var(--primary-color), var(--accent-color));
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    border-bottom: 2px solid var(--accent-color);
+    padding: 0.2rem 0;
+}
+
+/* No Results */
+.no-results {
+    width: 100%;
+    text-align: center;
+    padding: 2rem;
+    background-color: #f8fafc;
+    border-radius: 0.75rem;
+    border: 1px dashed #cbd5e1;
+    margin: 2rem 0;
+}
+
+.no-results p {
+    color: #64748b;
+    font-size: 1.1rem;
+}
+
+/* Active Select Button */
+.select-product.active {
+    background: linear-gradient(135deg, var(--accent-color), var(--primary-color));
+    transform: translateY(-3px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* ส่วนท้าย */
+footer {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    padding: 0;
+    position: relative;
+    margin-top: 3rem;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-around;
+    gap: 2rem;
+    padding: 2rem 1rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+}
+
+.footer-section {
+    flex: 1;
+    min-width: 250px;
+}
+
+.footer-section h3 {
+    margin-bottom: 1rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.footer-section p {
+    margin: 0.5rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.footer-bottom {
+    background: rgba(0, 0, 0, 0.1);
+    text-align: center;
+    padding: 1rem 0;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
+
+/* Animations */
+@keyframes headerFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--accent-color);
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-color);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    main {
+        padding: 0 1rem;
+    }
+    
+    #products {
+        grid-template-columns: 1fr;
+    }
+    
+    #calculator {
+        width: 100%;
+    }
+    
+    #search {
+        width: 90%;
+    }
+    
+    header h1 {
+        font-size: 2rem;
+    }
+    
+    .product:hover {
+        transform: translateY(-5px);
+    }
+    
+    .footer-content {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .footer-section h3, .footer-section p {
+        justify-content: center;
+    }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --background-color: #0f172a;
+        --text-color: #e2e8f0;
+    }
+    
+    body {
+        background-image: linear-gradient(to bottom, #0f172a, #1e293b);
+    }
+    
+    .product {
+        background-color: #1e293b;
+        border-color: #334155;
+    }
+    
+    #calculator {
+        background-color: #1e293b;
+        border-color: #334155;
+    }
+    
+    #installment, #productSelect, #installmentPeriod {
+        background-color: #0f172a;
+        border-color: #334155;
+        color: #e2e8f0;
+    }
+    
+    #installmentResult {
+        background-color: #1e3a8a;
+        border-color: #2563eb;
+        color: #e2e8f0;
+    }
+    
+    .installment-breakdown {
+        background-color: #1e293b;
+        border-color: #334155;
+        color: #e2e8f0;
+    }
+    
+    #installmentResult p, .installment-breakdown p {
+        color: #e2e8f0;
+    }
+    
+    ::-webkit-scrollbar-track {
+        background: #1e293b;
+    }
+    
+    .select-product {
+        background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+    }
+}
