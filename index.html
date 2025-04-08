@@ -23,8 +23,77 @@
         <div class="products-heading">
             <h2><i class="fas fa-store"></i> สินค้าของเรา</h2>
             <p>เลือกดูสมาร์ทโฟนคุณภาพสูงที่ตอบโจทย์ทุกความต้องการ</p>
-        </div>
-        
+        </div>  
+        <section id="calculator">
+            <h2><i class="fas fa-calculator"></i> คำนวณผ่อนชำระ</h2>
+            <div class="calculator-form">
+                <div class="form-group">
+                    <label for="productPrice"><i class="fas fa-mobile-alt"></i> ใส่ราคา:</label>
+                    <div class="price-input-container">
+                        <span class="currency-symbol">฿</span>
+                        <input type="text" id="productPrice" class="form-control price-input" placeholder="-" inputmode="numeric" pattern="[0-9]*">
+                    </div>
+                    <small class="input-hint">กรุณาใส่ราคาเป็นตัวเลขเท่านั้น</small>
+                </div>
+                <div class="form-group">
+                    <label for="installment"><i class="fas fa-percentage"></i> เลือกเปอร์เซ็นต์ที่ต้องการ:</label>
+                    <select id="installment">
+                        <option value="0">0% (ไม่มีเงินดาวน์)</option>
+                        <option value="10">10%</option>
+                        <option value="20">20%</option>
+                        <option value="30">30%</option>
+                        <option value="35">35%</option>
+                        <option value="40">40%</option>
+                        <option value="50">50%</option>
+                        <option value="60">60%</option>
+                        <option value="70">70%</option>
+                        <option value="80">80%</option>
+                        <option value="90">90%</option>
+                        <option value="100">100% (ชำระเต็มจำนวน)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="installmentPeriod"><i class="fas fa-calendar-alt"></i> ระยะเวลาผ่อน:</label>
+                    <select id="installmentPeriod">
+                        <option value="3">3 เดือน</option>
+                        <option value="6">6 เดือน</option>
+                        <option value="8">8 เดือน</option>
+                        <option value="10">10 เดือน</option>
+                        <option value="12">12 เดือน</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="serviceFee"><i class="fas fa-cog"></i> ค่าบริการต่อเดือน:</label>
+                    <div class="price-input-container">
+                        <span class="currency-symbol">฿</span>
+                        <input type="text" id="serviceFee" class="form-control price-input" placeholder="100" inputmode="numeric" pattern="[0-9]*">
+                    </div>
+                    <small class="input-hint">กรุณาใส่ค่าบริการเป็นตัวเลขเท่านั้น</small>
+                </div>
+            </div>
+            <div id="installmentResult"></div>
+            <div class="installment-breakdown">
+                <h4>ตารางการผ่อนชำระ</h4>
+                <div class="table-container">
+                    <div class="table-scroll">
+                        <i class="fas fa-chevron-right table-scroll-indicator"></i>
+                        <table class="payment-table">
+                            <thead>
+                                <tr>
+                                    <th>งวดที่</th>
+                                    <th>เงินต้น</th>
+                                    <th>ดอกเบี้ย</th>
+                                    <th>ยอดชำระ</th>
+                                    <th>เงินต้นคงเหลือ</th>
+                                </tr>
+                            </thead>
+                            <tbody id="paymentTableBody">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
         <section id="products">
           
             <div class="product">
@@ -317,77 +386,6 @@
                 
                 </div>
             </div> 
-        </section>
-
-        <section id="calculator">
-            <h2><i class="fas fa-calculator"></i> คำนวณผ่อนชำระ</h2>
-            <div class="calculator-form">
-                <div class="form-group">
-                    <label for="productPrice"><i class="fas fa-mobile-alt"></i> ใส่ราคา:</label>
-                    <div class="price-input-container">
-                        <span class="currency-symbol">฿</span>
-                        <input type="text" id="productPrice" class="form-control price-input" placeholder="-" inputmode="numeric" pattern="[0-9]*">
-                    </div>
-                    <small class="input-hint">กรุณาใส่ราคาเป็นตัวเลขเท่านั้น</small>
-                </div>
-                <div class="form-group">
-                    <label for="installment"><i class="fas fa-percentage"></i> เลือกเปอร์เซ็นต์ที่ต้องการ:</label>
-                    <select id="installment">
-                        <option value="0">0% (ไม่มีเงินดาวน์)</option>
-                        <option value="10">10%</option>
-                        <option value="20">20%</option>
-                        <option value="30">30%</option>
-                        <option value="35">35%</option>
-                        <option value="40">40%</option>
-                        <option value="50">50%</option>
-                        <option value="60">60%</option>
-                        <option value="70">70%</option>
-                        <option value="80">80%</option>
-                        <option value="90">90%</option>
-                        <option value="100">100% (ชำระเต็มจำนวน)</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="installmentPeriod"><i class="fas fa-calendar-alt"></i> ระยะเวลาผ่อน:</label>
-                    <select id="installmentPeriod">
-                        <option value="3">3 เดือน</option>
-                        <option value="6">6 เดือน</option>
-                        <option value="8">8 เดือน</option>
-                        <option value="10">10 เดือน</option>
-                        <option value="12">12 เดือน</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="serviceFee"><i class="fas fa-cog"></i> ค่าบริการต่อเดือน:</label>
-                    <div class="price-input-container">
-                        <span class="currency-symbol">฿</span>
-                        <input type="text" id="serviceFee" class="form-control price-input" placeholder="100" inputmode="numeric" pattern="[0-9]*">
-                    </div>
-                    <small class="input-hint">กรุณาใส่ค่าบริการเป็นตัวเลขเท่านั้น</small>
-                </div>
-            </div>
-            <div id="installmentResult"></div>
-            <div class="installment-breakdown">
-                <h4>ตารางการผ่อนชำระ</h4>
-                <div class="table-container">
-                    <div class="table-scroll">
-                        <i class="fas fa-chevron-right table-scroll-indicator"></i>
-                        <table class="payment-table">
-                            <thead>
-                                <tr>
-                                    <th>งวดที่</th>
-                                    <th>เงินต้น</th>
-                                    <th>ดอกเบี้ย</th>
-                                    <th>ยอดชำระ</th>
-                                    <th>เงินต้นคงเหลือ</th>
-                                </tr>
-                            </thead>
-                            <tbody id="paymentTableBody">
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
         </section>
     </main>
 
