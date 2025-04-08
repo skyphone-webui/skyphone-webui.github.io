@@ -2,7 +2,7 @@ const products = [
     {
         id: 1,
         name: "iPhone 14 Pro Max",
-        price: 12000,
+        price: 44900,
         image: "phone-image.jpg"
     },
     {
@@ -111,7 +111,7 @@ function calculateInstallment() {
         `;
     }
     
-    // เพิ่มเอฟเฟกต์การเคลื่อนไหว
+
     resultDiv.style.animation = 'none';
     breakdownDiv.style.animation = 'none';
     setTimeout(() => {
@@ -251,3 +251,148 @@ document.addEventListener('DOMContentLoaded', () => {
     
     calculateInstallment();
 });
+
+
+let cart = [];
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const savedCart = localStorage.getItem('cart');
+    if (savedCart) {
+        cart = JSON.parse(savedCart);
+        updateCartCount();
+    }
+});
+
+
+document.querySelectorAll('.add-to-cart').forEach(button => {
+    button.addEventListener('click', (e) => {
+        const productId = e.target.dataset.id;
+        const productName = e.target.dataset.name;
+        const productPrice = parseFloat(e.target.dataset.price);
+
+      
+        const existingItem = cart.find(item => item.id === productId);
+        if (existingItem) {
+            existingItem.quantity += 1;
+        } else {
+            cart.push({
+                id: productId,
+                name: productName,
+                price: productPrice,
+                quantity: 1
+            });
+        }
+
+        
+        localStorage.setItem('cart', JSON.stringify(cart));
+        updateCartCount();
+
+        
+        showNotification('เพิ่มสินค้าลงตะกร้าเรียบร้อยแล้ว');
+    });
+});
+
+
+function updateCartCount() {
+    const cartCount = document.getElementById('cartCount');
+    const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+    cartCount.textContent = totalItems;
+}
+
+
+function showNotification(message) {
+    const notification = document.createElement('div');
+    notification.className = 'notification';
+    notification.textContent = message;
+    document.body.appendChild(notification);
+
+    setTimeout(() => {
+        notification.remove();
+    }, 3000);
+}
+
+// Search functionality
+const searchInput = document.getElementById('search');
+searchInput.addEventListener('input', (e) => {
+    const searchTerm = e.target.value.toLowerCase();
+    const products = document.querySelectorAll('.product');
+
+    products.forEach(product => {
+        const productName = product.querySelector('h3').textContent.toLowerCase();
+        if (productName.includes(searchTerm)) {
+            product.style.display = 'block';
+        } else {
+            product.style.display = 'none';
+        }
+    });
+});
+
+// Calculator functionality
+document.addEventListener('DOMContentLoaded', function() {
+    // Load cart items on calculator page
+    if (window.location.pathname.includes('calculator.html')) {
+        displayCartItems();
+        setupInstallmentCalculator();
+    }
+});
+
+function displayCartItems() {
+    const cartItemsContainer = document.getElementById('cartItems');
+    const totalAmountElement = document.getElementById('totalAmount');
+    let totalAmount = 0;
+
+    cartItemsContainer.innerHTML = '';
+    
+    if (cart.length === 0) {
+        cartItemsContainer.innerHTML = '<p>ไม่มีสินค้าในตะกร้า</p>';
+        totalAmountElement.textContent = '0 บาท';
+        return;
+    }
+
+    cart.forEach(item => {
+        const itemElement = document.createElement('div');
+        itemElement.className = 'cart-item';
+        itemElement.innerHTML = `
+            <span>${item.name}</span>
+            <span>${item.price.toLocaleString()} บาท</span>
+        `;
+        cartItemsContainer.appendChild(itemElement);
+        totalAmount += item.price;
+    });
+
+    totalAmountElement.textContent = `${totalAmount.toLocaleString()} บาท`;
+    document.getElementById('productTotal').textContent = `${totalAmount.toLocaleString()} บาท`;
+}
+
+function setupInstallmentCalculator() {
+    const installmentOptions = document.querySelectorAll('.installment-option');
+    const interestRates = {
+        6: 0.05,   // 5% for 6 months
+        10: 0.08,  // 8% for 10 months
+        12: 0.10,  // 10% for 12 months
+        24: 0.15   // 15% for 24 months
+    };
+
+    installmentOptions.forEach(option => {
+        option.addEventListener('click', function() {
+           
+            installmentOptions.forEach(opt => opt.classList.remove('active'));
+           
+            this.classList.add('active');
+
+            const months = parseInt(this.dataset.months);
+            const totalAmount = cart.reduce((sum, item) => sum + item.price, 0);
+            const interestRate = interestRates[months];
+            const interest = totalAmount * interestRate;
+            const totalPayment = totalAmount + interest;
+            const monthlyPayment = totalPayment / months;
+
+           
+            document.getElementById('installmentMonths').textContent = `${months} เดือน`;
+            document.getElementById('interest').textContent = `${interest.toLocaleString()} บาท`;
+            document.getElementById('monthlyPayment').textContent = `${monthlyPayment.toLocaleString()} บาท`;
+            document.getElementById('totalPayment').textContent = `${totalPayment.toLocaleString()} บาท`;
+        });
+    });
+}
