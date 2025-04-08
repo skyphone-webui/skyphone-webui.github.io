@@ -129,19 +129,21 @@ function formatNumber(number) {
 function searchProducts() {
     const searchInput = document.getElementById('search');
     const products = document.querySelectorAll('.product');
-    const searchTerm = searchInput.value.toLowerCase();
+    const searchTerm = searchInput.value.toLowerCase().trim();
     let hasResults = false;
     
     products.forEach(product => {
         const productName = product.querySelector('h3').textContent.toLowerCase();
         const productDetails = product.querySelector('.details').textContent.toLowerCase();
+        const productPrice = product.querySelector('.price').textContent.toLowerCase();
         
-        if (productName.includes(searchTerm) || productDetails.includes(searchTerm)) {
+        if (productName.includes(searchTerm) || 
+            productDetails.includes(searchTerm) || 
+            productPrice.includes(searchTerm)) {
             product.style.display = 'block';
             hasResults = true;
             
-           
-            if (searchTerm.trim() !== '') {
+            if (searchTerm !== '') {
                 highlightSearchTerm(product, searchTerm);
             } else {
                 resetHighlight(product);
@@ -152,18 +154,21 @@ function searchProducts() {
     });
     
     const productsSection = document.getElementById('products');
-    if (!hasResults && searchTerm.trim() !== '') {
-        if (!document.querySelector('.no-results')) {
-            const noResults = document.createElement('div');
-            noResults.className = 'no-results';
-            noResults.innerHTML = `<p>ไม่พบสินค้าที่ค้นหา "${searchTerm}"</p>`;
-            productsSection.appendChild(noResults);
+    const noResults = document.querySelector('.no-results');
+    
+    if (!hasResults && searchTerm !== '') {
+        if (!noResults) {
+            const noResultsDiv = document.createElement('div');
+            noResultsDiv.className = 'no-results';
+            noResultsDiv.innerHTML = `
+                <i class="fas fa-search"></i>
+                <p>ไม่พบสินค้าที่ค้นหา "${searchTerm}"</p>
+                <p class="suggestion">ลองค้นหาด้วยคำอื่นหรือตรวจสอบการสะกดคำ</p>
+            `;
+            productsSection.appendChild(noResultsDiv);
         }
-    } else {
-        const noResults = document.querySelector('.no-results');
-        if (noResults) {
-            noResults.remove();
-        }
+    } else if (noResults) {
+        noResults.remove();
     }
 }
 
@@ -241,8 +246,22 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('installmentPeriod').addEventListener('change', calculateInstallment);
     
     
-    document.getElementById('search').addEventListener('input', searchProducts);
+    const searchInput = document.getElementById('search');
     
+    searchInput.addEventListener('input', () => {
+        searchProducts();
+    });
+    
+    searchInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            searchProducts();
+        }
+    });
+    
+    const searchIcon = document.querySelector('.search-icon');
+    searchIcon.addEventListener('click', () => {
+        searchProducts();
+    });
     
     document.querySelectorAll('.select-product').forEach(button => {
         button.addEventListener('click', selectProduct);
@@ -271,7 +290,7 @@ document.querySelectorAll('.add-to-cart').forEach(button => {
         const productName = e.target.dataset.name;
         const productPrice = parseFloat(e.target.dataset.price);
 
-      
+        // เพิ่มสินค้าลงในตะกร้า
         const existingItem = cart.find(item => item.id === productId);
         if (existingItem) {
             existingItem.quantity += 1;
@@ -284,11 +303,11 @@ document.querySelectorAll('.add-to-cart').forEach(button => {
             });
         }
 
-        
+        // บันทึกลง localStorage
         localStorage.setItem('cart', JSON.stringify(cart));
         updateCartCount();
 
-        
+        // แสดงการแจ้งเตือน
         showNotification('เพิ่มสินค้าลงตะกร้าเรียบร้อยแล้ว');
     });
 });
