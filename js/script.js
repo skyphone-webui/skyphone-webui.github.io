@@ -1,107 +1,66 @@
-const products = [
-    {
-        id: 1,
-        name: "iPhone 14 Pro Max",
-        price: 44900,
-        image: "phone-image.jpg"
-    },
-    {
-        id: 2,
-        name: "Samsung Galaxy S23 Ultra",
-        price: 15000,
-        image: "phone-image2.jpg"
-    },
-    {
-        id: 3,
-        name: "Google Pixel 7 Pro",
-        price: 18000,
-        image: "phone-image3.jpg"
-    }
-];
-
-
 function calculateInstallment() {
-    const productPrice = parseInt(document.getElementById('productSelect').value);
+    const productPrice = parseInt(document.getElementById('productPrice').value);
     const percentage = parseInt(document.getElementById('installment').value);
     const period = parseInt(document.getElementById('installmentPeriod').value);
-    
-    
+
     const downPayment = (productPrice * percentage) / 100;
     const remainingAmount = productPrice - downPayment;
-    
-    
-    const interestRate = 0.01;
-    let totalPayment = 0;
+
+    const multipliers = {
+        3: 1.6,
+        6: 2.0,
+        8: 2.1
+    };
+    const serviceFee = 100;
+
+    let monthlyPayment = 0;
     let totalInterest = 0;
- 
-    if (percentage < 100) {
-        const monthlyPrincipal = remainingAmount / period;
-        let remainingPrincipal = remainingAmount;
-        totalPayment = 0;
-        
-        for (let i = 0; i < period; i++) {
-            const monthlyInterest = remainingPrincipal * interestRate;
-            totalInterest += monthlyInterest;
-            remainingPrincipal -= monthlyPrincipal;
-            totalPayment += monthlyPrincipal + monthlyInterest;
-        }
+
+    if (percentage < 100 && multipliers[period]) {
+        const totalWithMultiplier = remainingAmount * multipliers[period];
+        monthlyPayment = (totalWithMultiplier / period) + serviceFee;
+        totalInterest = totalWithMultiplier - remainingAmount;
     }
-    
-    const monthlyPayment = period > 0 ? totalPayment / period : 0;
-    
- 
+
     const resultDiv = document.getElementById('installmentResult');
     const breakdownDiv = document.querySelector('.installment-breakdown');
-    
+
     resultDiv.innerHTML = `
         <h3>สรุปการผ่อนชำระ</h3>
         <p><strong>เงินดาวน์:</strong> <span>฿${formatNumber(downPayment)}</span></p>
         <p><strong>ยอดคงเหลือ:</strong> <span>฿${formatNumber(remainingAmount)}</span></p>
         <p><strong>ดอกเบี้ยรวม:</strong> <span>฿${formatNumber(totalInterest)}</span></p>
+        <p><strong>ค่าบริการ:</strong> <span>฿${formatNumber(serviceFee)}</span></p>
         <p><strong>ผ่อนชำระเดือนละ:</strong> <span class="highlight">฿${formatNumber(monthlyPayment)}</span></p>
     `;
-    
-    
-    if (percentage < 100 && period > 0) {
+
+    if (percentage < 100 && multipliers[period]) {
         let tableHTML = `
             <h4>ตารางการผ่อนชำระ</h4>
             <table class="payment-table">
                 <thead>
                     <tr>
                         <th>งวดที่</th>
-                        <th>เงินต้น</th>
-                        <th>ดอกเบี้ย</th>
-                        <th>ยอดชำระ</th>
-                        <th>เงินต้นคงเหลือ</th>
+                        <th>ยอดชำระต่อเดือน</th>
                     </tr>
                 </thead>
                 <tbody>
         `;
-        
-        let remainingPrincipal = remainingAmount;
-        const monthlyPrincipal = remainingAmount / period;
-        
+
         for (let i = 1; i <= period; i++) {
-            const monthlyInterest = remainingPrincipal * interestRate;
-            const monthlyTotal = monthlyPrincipal + monthlyInterest;
-            remainingPrincipal -= monthlyPrincipal;
-            
             tableHTML += `
                 <tr>
                     <td>${i}</td>
-                    <td>฿${formatNumber(monthlyPrincipal)}</td>
-                    <td>฿${formatNumber(monthlyInterest)}</td>
-                    <td>฿${formatNumber(monthlyTotal)}</td>
-                    <td>฿${formatNumber(remainingPrincipal < 0 ? 0 : remainingPrincipal)}</td>
+                    <td>฿${formatNumber(monthlyPayment)}</td>
                 </tr>
             `;
         }
-        
+
         tableHTML += `
                 </tbody>
             </table>
         `;
-        
+
         breakdownDiv.innerHTML = tableHTML;
     } else if (percentage === 100) {
         breakdownDiv.innerHTML = `
@@ -110,7 +69,6 @@ function calculateInstallment() {
             <p>ไม่มีค่าใช้จ่ายในการผ่อนชำระและดอกเบี้ย</p>
         `;
     }
-    
 
     resultDiv.style.animation = 'none';
     breakdownDiv.style.animation = 'none';
@@ -120,8 +78,10 @@ function calculateInstallment() {
     }, 10);
 }
 
-
 function formatNumber(number) {
+    if (isNaN(number) || number === null || number === undefined || number === '') {
+        return '-';
+    }
     return number.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
 }
 
@@ -213,13 +173,12 @@ function resetHighlight(product) {
 
 function selectProduct(event) {
     const productId = event.target.dataset.id;
-    const productPrice = event.target.dataset.price;
-    const productSelect = document.getElementById('productSelect');
+    const productPrice = document.getElementById('productPrice');
     
     
-    for (let i = 0; i < productSelect.options.length; i++) {
-        if (productSelect.options[i].value === productPrice) {
-            productSelect.selectedIndex = i;
+    for (let i = 0; i < productPrice.options.length; i++) {
+        if (productPrice.options[i].value === productPrice) {
+            productPrice.selectedIndex = i;
             break;
         }
     }
@@ -241,7 +200,7 @@ function selectProduct(event) {
 
 document.addEventListener('DOMContentLoaded', () => {
     
-    document.getElementById('productSelect').addEventListener('change', calculateInstallment);
+    document.getElementById('productPrice').addEventListener('change', calculateInstallment);
     document.getElementById('installment').addEventListener('change', calculateInstallment);
     document.getElementById('installmentPeriod').addEventListener('change', calculateInstallment);
     
@@ -290,7 +249,7 @@ document.querySelectorAll('.add-to-cart').forEach(button => {
         const productName = e.target.dataset.name;
         const productPrice = parseFloat(e.target.dataset.price);
 
-        // เพิ่มสินค้าลงในตะกร้า
+        
         const existingItem = cart.find(item => item.id === productId);
         if (existingItem) {
             existingItem.quantity += 1;
@@ -303,11 +262,11 @@ document.querySelectorAll('.add-to-cart').forEach(button => {
             });
         }
 
-        // บันทึกลง localStorage
+       
         localStorage.setItem('cart', JSON.stringify(cart));
         updateCartCount();
 
-        // แสดงการแจ้งเตือน
+        
         showNotification('เพิ่มสินค้าลงตะกร้าเรียบร้อยแล้ว');
     });
 });
@@ -331,7 +290,7 @@ function showNotification(message) {
     }, 3000);
 }
 
-// Search functionality
+
 const searchInput = document.getElementById('search');
 searchInput.addEventListener('input', (e) => {
     const searchTerm = e.target.value.toLowerCase();
@@ -347,9 +306,9 @@ searchInput.addEventListener('input', (e) => {
     });
 });
 
-// Calculator functionality
+
 document.addEventListener('DOMContentLoaded', function() {
-    // Load cart items on calculator page
+
     if (window.location.pathname.includes('calculator.html')) {
         displayCartItems();
         setupInstallmentCalculator();
