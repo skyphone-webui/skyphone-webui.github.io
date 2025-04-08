@@ -1,4 +1,4 @@
-/* ตั้งค่าพื้นฐาน */
+
 * {
     margin: 0;
     padding: 0;
@@ -23,7 +23,7 @@ body {
     background-image: linear-gradient(to bottom, #f1f5f9, #e2e8f0);
 }
 
-/* ส่วนหัว */
+
 header {
     background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
     color: white;
@@ -109,8 +109,6 @@ header h1 {
     transform: scale(1.02);
     box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
 }
-
-/* เนื้อหาหลัก */
 main {
     display: flex;
     flex-direction: column;
@@ -288,7 +286,7 @@ main {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* เครื่องคำนวณผ่อนชำระ */
+
 #calculator {
     background-color: white;
     padding: 2rem;
