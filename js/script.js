@@ -1,7 +1,8 @@
 function calculateInstallment() {
-    const productPrice = parseInt(document.getElementById('productPrice').value);
+    const productPrice = parseInt(document.getElementById('productPrice').value) || 0;
     const percentage = parseInt(document.getElementById('installment').value);
     const period = parseInt(document.getElementById('installmentPeriod').value);
+    const serviceFee = parseInt(document.getElementById('serviceFee').value) || 100; // Default to 100 if not specified
 
     const downPayment = (productPrice * percentage) / 100;
     const remainingAmount = productPrice - downPayment;
@@ -9,9 +10,10 @@ function calculateInstallment() {
     const multipliers = {
         3: 1.6,
         6: 2.0,
-        8: 2.1
+        8: 2.1,
+        10: 2.5,
+        12: 3.0
     };
-    const serviceFee = 100;
 
     let monthlyPayment = 0;
     let totalInterest = 0;
@@ -30,7 +32,7 @@ function calculateInstallment() {
         <p><strong>เงินดาวน์:</strong> <span>฿${formatNumber(downPayment)}</span></p>
         <p><strong>ยอดคงเหลือ:</strong> <span>฿${formatNumber(remainingAmount)}</span></p>
         <p><strong>ดอกเบี้ยรวม:</strong> <span>฿${formatNumber(totalInterest)}</span></p>
-        <p><strong>ค่าบริการ:</strong> <span>฿${formatNumber(serviceFee)}</span></p>
+        <p><strong>ค่าบริการต่อเดือน:</strong> <span>฿${formatNumber(serviceFee)}</span></p>
         <p><strong>ผ่อนชำระเดือนละ:</strong> <span class="highlight">฿${formatNumber(monthlyPayment)}</span></p>
     `;
 
@@ -203,6 +205,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('productPrice').addEventListener('change', calculateInstallment);
     document.getElementById('installment').addEventListener('change', calculateInstallment);
     document.getElementById('installmentPeriod').addEventListener('change', calculateInstallment);
+    document.getElementById('serviceFee').addEventListener('change', calculateInstallment);
     
     
     const searchInput = document.getElementById('search');
