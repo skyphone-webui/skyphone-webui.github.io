@@ -11,8 +11,8 @@ function calculateInstallment() {
         3: 1.6,
         6: 2.0,
         8: 2.1,
-        10: 2.5,
-        12: 3.0
+        10: 2.2,
+        12: 2.3
     };
 
     let monthlyPayment = 0;
