@@ -1,4 +1,3 @@
-// ข้อมูลสินค้า
 const products = [
     {
         id: 1,
@@ -20,22 +19,21 @@ const products = [
     }
 ];
 
-// คำนวณผ่อนชำระ
+
 function calculateInstallment() {
     const productPrice = parseInt(document.getElementById('productSelect').value);
     const percentage = parseInt(document.getElementById('installment').value);
     const period = parseInt(document.getElementById('installmentPeriod').value);
     
-    // คำนวณยอดผ่อนชำระ
+    
     const downPayment = (productPrice * percentage) / 100;
     const remainingAmount = productPrice - downPayment;
     
-    // คำนวณดอกเบี้ย (ตัวอย่าง: 1% ต่อเดือน สำหรับเงินต้นคงเหลือ)
+    
     const interestRate = 0.01;
     let totalPayment = 0;
     let totalInterest = 0;
-    
-    // คำนวณแบบลดต้นลดดอก
+ 
     if (percentage < 100) {
         const monthlyPrincipal = remainingAmount / period;
         let remainingPrincipal = remainingAmount;
@@ -51,7 +49,7 @@ function calculateInstallment() {
     
     const monthlyPayment = period > 0 ? totalPayment / period : 0;
     
-    // แสดงผลลัพธ์
+ 
     const resultDiv = document.getElementById('installmentResult');
     const breakdownDiv = document.querySelector('.installment-breakdown');
     
@@ -63,7 +61,7 @@ function calculateInstallment() {
         <p><strong>ผ่อนชำระเดือนละ:</strong> <span class="highlight">฿${formatNumber(monthlyPayment)}</span></p>
     `;
     
-    // สร้างตารางแสดงการผ่อนชำระรายเดือน
+    
     if (percentage < 100 && period > 0) {
         let tableHTML = `
             <h4>ตารางการผ่อนชำระ</h4>
@@ -122,12 +120,12 @@ function calculateInstallment() {
     }, 10);
 }
 
-// ฟังก์ชันจัดรูปแบบตัวเลข
+
 function formatNumber(number) {
     return number.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
 }
 
-// ค้นหาสินค้า
+
 function searchProducts() {
     const searchInput = document.getElementById('search');
     const products = document.querySelectorAll('.product');
@@ -142,7 +140,7 @@ function searchProducts() {
             product.style.display = 'block';
             hasResults = true;
             
-            // เน้นคำที่ค้นหาพบ
+           
             if (searchTerm.trim() !== '') {
                 highlightSearchTerm(product, searchTerm);
             } else {
@@ -169,7 +167,7 @@ function searchProducts() {
     }
 }
 
-// เน้นคำที่ค้นหาพบ
+
 function highlightSearchTerm(product, term) {
     resetHighlight(product);
     
@@ -184,7 +182,7 @@ function highlightSearchTerm(product, term) {
     });
 }
 
-// รีเซ็ตการเน้นคำ
+
 function resetHighlight(product) {
     const textElements = product.querySelectorAll('h3, p');
     textElements.forEach(el => {
@@ -207,13 +205,13 @@ function resetHighlight(product) {
     });
 }
 
-// เลือกสินค้า
+
 function selectProduct(event) {
     const productId = event.target.dataset.id;
     const productPrice = event.target.dataset.price;
     const productSelect = document.getElementById('productSelect');
     
-    // เลือกสินค้าในดรอปดาวน์
+    
     for (let i = 0; i < productSelect.options.length; i++) {
         if (productSelect.options[i].value === productPrice) {
             productSelect.selectedIndex = i;
@@ -221,13 +219,13 @@ function selectProduct(event) {
         }
     }
     
-    // เลื่อนไปที่เครื่องคำนวณ
+    
     document.getElementById('calculator').scrollIntoView({ behavior: 'smooth' });
     
-    // คำนวณใหม่
+   
     calculateInstallment();
     
-    // เอฟเฟกต์การเลือกปุ่ม
+    
     const buttons = document.querySelectorAll('.select-product');
     buttons.forEach(button => {
         button.classList.remove('active');
@@ -235,21 +233,21 @@ function selectProduct(event) {
     event.target.classList.add('active');
 }
 
-// เพิ่ม Event Listeners
+
 document.addEventListener('DOMContentLoaded', () => {
-    // Event listeners สำหรับเครื่องคำนวณ
+    
     document.getElementById('productSelect').addEventListener('change', calculateInstallment);
     document.getElementById('installment').addEventListener('change', calculateInstallment);
     document.getElementById('installmentPeriod').addEventListener('change', calculateInstallment);
     
-    // Event listener สำหรับการค้นหา
+    
     document.getElementById('search').addEventListener('input', searchProducts);
     
-    // Event listeners สำหรับปุ่มเลือกสินค้า
+    
     document.querySelectorAll('.select-product').forEach(button => {
         button.addEventListener('click', selectProduct);
     });
     
-    // คำนวณครั้งแรกเมื่อโหลดหน้า
+    
     calculateInstallment();
 });
