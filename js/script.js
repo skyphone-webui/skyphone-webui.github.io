@@ -201,7 +201,7 @@ function selectProduct(event) {
 
 
 document.addEventListener('DOMContentLoaded', () => {
-    
+    // Existing event listeners
     document.getElementById('productPrice').addEventListener('change', calculateInstallment);
     document.getElementById('installment').addEventListener('change', calculateInstallment);
     document.getElementById('installmentPeriod').addEventListener('change', calculateInstallment);
@@ -349,10 +349,10 @@ function displayCartItems() {
 function setupInstallmentCalculator() {
     const installmentOptions = document.querySelectorAll('.installment-option');
     const interestRates = {
-        6: 0.05,   // 5% for 6 months
-        10: 0.08,  // 8% for 10 months
-        12: 0.10,  // 10% for 12 months
-        24: 0.15   // 15% for 24 months
+        6: 0.05,   
+        10: 0.08,  
+        12: 0.10,  
+        24: 0.15   
     };
 
     installmentOptions.forEach(option => {
