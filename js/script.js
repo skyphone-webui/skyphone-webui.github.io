@@ -2,81 +2,130 @@ function calculateInstallment() {
     const productPrice = parseInt(document.getElementById('productPrice').value) || 0;
     const percentage = parseInt(document.getElementById('installment').value);
     const period = parseInt(document.getElementById('installmentPeriod').value);
-    const serviceFee = parseInt(document.getElementById('serviceFee').value) || 0; 
+    const serviceFee = parseInt(document.getElementById('serviceFee').value) || 0;
 
+    
     const downPayment = (productPrice * percentage) / 100;
-    const remainingAmount = productPrice - downPayment;
+    const loanAmount = productPrice - downPayment;
 
+ 
     const multipliers = {
-        3: 1.6,
-        6: 2.0,
-        8: 2.1,
-        10: 2.2,
-        12: 2.3
+        6: 0.3167,
+        8: 0.2438,
+        10: 0.2050
     };
 
     let monthlyPayment = 0;
-    let totalInterest = 0;
+    let totalPayment = 0;
+    let totalContractAmount = 0;
 
     if (percentage < 100 && multipliers[period]) {
-        const totalWithMultiplier = remainingAmount * multipliers[period];
-        monthlyPayment = (totalWithMultiplier / period) + serviceFee;
-        totalInterest = totalWithMultiplier - remainingAmount;
+        monthlyPayment = Math.ceil(loanAmount * multipliers[period]) + serviceFee;
+        totalPayment = monthlyPayment * period;
+        totalContractAmount = downPayment + totalPayment;
     }
 
     const resultDiv = document.getElementById('installmentResult');
-    const breakdownDiv = document.querySelector('.installment-breakdown');
-
     resultDiv.innerHTML = `
         <h3>สรุปการผ่อนชำระ</h3>
-        <p><strong>เงินดาวน์:</strong> <span>฿${formatNumber(downPayment)}</span></p>
-        <p><strong>ยอดคงเหลือ:</strong> <span>฿${formatNumber(remainingAmount)}</span></p>
-        <p><strong>ดอกเบี้ยรวม:</strong> <span>฿${formatNumber(totalInterest)}</span></p>
-        <p><strong>ค่าบริการต่อเดือน:</strong> <span>฿${formatNumber(serviceFee)}</span></p>
-        <p><strong>ผ่อนชำระเดือนละ:</strong> <span class="highlight">฿${formatNumber(monthlyPayment)}</span></p>
+        <div class="result-grid">
+            <div class="result-item">
+                <span class="label">ราคาสินค้า:</span>
+                <span class="value">฿${formatNumber(productPrice)}</span>
+            </div>
+            <div class="result-item">
+                <span class="label">เงินดาวน์ (${percentage}%):</span>
+                <span class="value">฿${formatNumber(downPayment)}</span>
+            </div>
+            <div class="result-item">
+                <span class="label">ยอดสินเชื่อ:</span>
+                <span class="value">฿${formatNumber(loanAmount)}</span>
+            </div>
+            <div class="result-item">
+                <span class="label">ค่าบริการต่อเดือน:</span>
+                <span class="value">฿${formatNumber(serviceFee)}</span>
+            </div>
+            <div class="result-item highlight">
+                <span class="label">ผ่อนชำระเดือนละ:</span>
+                <span class="value">฿${formatNumber(monthlyPayment)}</span>
+            </div>
+            <div class="result-item">
+                <span class="label">ยอดผ่อนรวม:</span>
+                <span class="value">฿${formatNumber(totalPayment)}</span>
+            </div>
+            <div class="result-item highlight">
+                <span class="label">รวมเงินทำสัญญา:</span>
+                <span class="value">฿${formatNumber(totalContractAmount)}</span>
+            </div>
+        </div>
     `;
 
+ 
     if (percentage < 100 && multipliers[period]) {
         let tableHTML = `
             <h4>ตารางการผ่อนชำระ</h4>
-            <table class="payment-table">
-                <thead>
-                    <tr>
-                        <th>งวดที่</th>
-                        <th>ยอดชำระต่อเดือน</th>
-                    </tr>
-                </thead>
-                <tbody>
+            <div class="table-container">
+                <div class="table-scroll">
+                    <table class="payment-table">
+                        <thead>
+                            <tr>
+                                <th>งวดที่</th>
+                                <th>เงินต้น</th>
+                                <th>ดอกเบี้ย</th>
+                                <th>ค่าบริการ</th>
+                                <th>ยอดชำระ</th>
+                                <th>เงินต้นคงเหลือ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
         `;
 
+        let remainingPrincipal = loanAmount;
+        const monthlyPrincipal = Math.ceil(loanAmount / period);
+        const monthlyInterest = Math.ceil(loanAmount * multipliers[period]) - monthlyPrincipal;
+
         for (let i = 1; i <= period; i++) {
+            const currentPrincipal = i === period ? remainingPrincipal : monthlyPrincipal;
+            const currentInterest = monthlyInterest;
+            const currentServiceFee = serviceFee;
+            const currentPayment = currentPrincipal + currentInterest + currentServiceFee;
+            
+            remainingPrincipal -= currentPrincipal;
+
             tableHTML += `
                 <tr>
                     <td>${i}</td>
-                    <td>฿${formatNumber(monthlyPayment)}</td>
+                    <td>฿${formatNumber(currentPrincipal)}</td>
+                    <td>฿${formatNumber(currentInterest)}</td>
+                    <td>฿${formatNumber(currentServiceFee)}</td>
+                    <td>฿${formatNumber(currentPayment)}</td>
+                    <td>฿${formatNumber(remainingPrincipal)}</td>
                 </tr>
             `;
         }
 
         tableHTML += `
-                </tbody>
-            </table>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         `;
 
-        breakdownDiv.innerHTML = tableHTML;
+        document.querySelector('.installment-breakdown').innerHTML = tableHTML;
     } else if (percentage === 100) {
-        breakdownDiv.innerHTML = `
+        document.querySelector('.installment-breakdown').innerHTML = `
             <h4>การชำระเงิน</h4>
             <p>คุณเลือกชำระเต็มจำนวน ฿${formatNumber(productPrice)}</p>
             <p>ไม่มีค่าใช้จ่ายในการผ่อนชำระและดอกเบี้ย</p>
         `;
     }
 
+   
     resultDiv.style.animation = 'none';
-    breakdownDiv.style.animation = 'none';
+    document.querySelector('.installment-breakdown').style.animation = 'none';
     setTimeout(() => {
         resultDiv.style.animation = 'fadeInUp 0.5s ease';
-        breakdownDiv.style.animation = 'fadeInUp 0.5s ease 0.1s both';
+        document.querySelector('.installment-breakdown').style.animation = 'fadeInUp 0.5s ease 0.1s both';
     }, 10);
 }
 
@@ -84,9 +133,11 @@ function formatNumber(number) {
     if (isNaN(number) || number === null || number === undefined || number === '') {
         return '-';
     }
-    return number.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+    return number.toLocaleString('th-TH', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    });
 }
-
 
 function searchProducts() {
     const searchInput = document.getElementById('search');
@@ -134,7 +185,6 @@ function searchProducts() {
     }
 }
 
-
 function highlightSearchTerm(product, term) {
     resetHighlight(product);
     
@@ -148,7 +198,6 @@ function highlightSearchTerm(product, term) {
         }
     });
 }
-
 
 function resetHighlight(product) {
     const textElements = product.querySelectorAll('h3, p');
@@ -171,7 +220,6 @@ function resetHighlight(product) {
         }
     });
 }
-
 
 function selectProduct(event) {
     const productId = event.target.dataset.id;
@@ -199,9 +247,8 @@ function selectProduct(event) {
     event.target.classList.add('active');
 }
 
-
 document.addEventListener('DOMContentLoaded', () => {
-    // Existing event listeners
+    
     document.getElementById('productPrice').addEventListener('change', calculateInstallment);
     document.getElementById('installment').addEventListener('change', calculateInstallment);
     document.getElementById('installmentPeriod').addEventListener('change', calculateInstallment);
@@ -233,9 +280,7 @@ document.addEventListener('DOMContentLoaded', () => {
     calculateInstallment();
 });
 
-
 let cart = [];
-
 
 document.addEventListener('DOMContentLoaded', () => {
     const savedCart = localStorage.getItem('cart');
@@ -244,7 +289,6 @@ document.addEventListener('DOMContentLoaded', () => {
         updateCartCount();
     }
 });
-
 
 document.querySelectorAll('.add-to-cart').forEach(button => {
     button.addEventListener('click', (e) => {
@@ -274,13 +318,11 @@ document.querySelectorAll('.add-to-cart').forEach(button => {
     });
 });
 
-
 function updateCartCount() {
     const cartCount = document.getElementById('cartCount');
     const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
     cartCount.textContent = totalItems;
 }
-
 
 function showNotification(message) {
     const notification = document.createElement('div');
@@ -292,7 +334,6 @@ function showNotification(message) {
         notification.remove();
     }, 3000);
 }
-
 
 const searchInput = document.getElementById('search');
 searchInput.addEventListener('input', (e) => {
@@ -308,7 +349,6 @@ searchInput.addEventListener('input', (e) => {
         }
     });
 });
-
 
 document.addEventListener('DOMContentLoaded', function() {
 
