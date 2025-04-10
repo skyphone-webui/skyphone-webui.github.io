@@ -3,18 +3,28 @@ function calculateInstallment() {
     const percentage = parseInt(document.getElementById('installment').value);
     const period = parseInt(document.getElementById('installmentPeriod').value);
     const serviceFee = parseInt(document.getElementById('serviceFee').value) || 0;
+    const company = document.getElementById('company').value;
 
     
+    const companyMultipliers = {
+        shokun: {
+            6: 0.3167,
+            8: 0.2438,
+            10: 0.2050
+        },
+        fast: {
+            3: 1.6,
+            6: 2,
+            8: 2.1,
+            10: 2.2,
+            12: 2.3,
+        },
+    };
+
     const downPayment = (productPrice * percentage) / 100;
     const loanAmount = productPrice - downPayment;
 
- 
-    const multipliers = {
-        6: 0.3167,
-        8: 0.2438,
-        10: 0.2050
-    };
-
+    const multipliers = companyMultipliers[company];
     let monthlyPayment = 0;
     let totalPayment = 0;
     let totalContractAmount = 0;
@@ -247,12 +257,40 @@ function selectProduct(event) {
     event.target.classList.add('active');
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+function updateInstallmentPeriods() {
+    const company = document.getElementById('company').value;
+    const installmentPeriodSelect = document.getElementById('installmentPeriod');
     
+    
+    installmentPeriodSelect.innerHTML = '';
+    
+  
+    if (company === 'shokun') {
+        const periods = [6, 8, 10];
+        periods.forEach(period => {
+            const option = document.createElement('option');
+            option.value = period;
+            option.textContent = `${period} เดือน`;
+            installmentPeriodSelect.appendChild(option);
+        });
+    } 
+    else if (company === 'fast') {
+        const periods = [3, 6, 8, 10, 12];
+        periods.forEach(period => {
+            const option = document.createElement('option');
+            option.value = period;
+            option.textContent = `${period} เดือน`;
+            installmentPeriodSelect.appendChild(option);
+        });
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('productPrice').addEventListener('change', calculateInstallment);
     document.getElementById('installment').addEventListener('change', calculateInstallment);
     document.getElementById('installmentPeriod').addEventListener('change', calculateInstallment);
     document.getElementById('serviceFee').addEventListener('change', calculateInstallment);
+    document.getElementById('company').addEventListener('change', calculateInstallment);
     
     
     const searchInput = document.getElementById('search');
@@ -278,6 +316,15 @@ document.addEventListener('DOMContentLoaded', () => {
     
     
     calculateInstallment();
+    
+
+    updateInstallmentPeriods();
+    
+
+    document.getElementById('company').addEventListener('change', () => {
+        updateInstallmentPeriods();
+        calculateInstallment(); 
+    });
 });
 
 let cart = [];
